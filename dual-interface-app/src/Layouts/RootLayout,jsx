@@ -1,0 +1,23 @@
+import React from 'react';
+import { NavLink, Outlet } from 'react-router-dom';
+import '../styles/App.css'; // Make sure this path is correct
+
+const RootLayout = () => {
+  return (
+    <div className="app-container">
+      <header className="app-header">
+        <h1>Dual-Interface App</h1>
+        <nav>
+          <NavLink to="/">Calculator</NavLink>
+          <NavLink to="/shader">Shader Editor</NavLink>
+        </nav>
+      </header>
+      <main>
+        {/* The Outlet component renders the matched child route */}
+        <Outlet />
+      </main>
+    </div>
+  );
+};
+
+export default RootLayout;
