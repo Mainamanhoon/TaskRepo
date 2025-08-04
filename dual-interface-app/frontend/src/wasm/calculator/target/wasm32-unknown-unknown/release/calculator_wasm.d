@@ -1,0 +1,1 @@
+\\wsl.localhost\Ubuntu\home\psyfen\projects\dual-interface-app\frontend\src\wasm\calculator\target\wasm32-unknown-unknown\release\calculator_wasm.wasm: \\wsl.localhost\Ubuntu\home\psyfen\projects\dual-interface-app\frontend\src\wasm\calculator\src\lib.rs
