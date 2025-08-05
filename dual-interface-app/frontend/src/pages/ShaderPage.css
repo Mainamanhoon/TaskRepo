@@ -1,16 +1,43 @@
 .shader-page-container {
+  position: relative;
+  z-index: 10;
+  padding: 80px 20px 20px 20px;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-  max-width: 800px;
-  margin: 0 auto;
+  background: transparent;
+}
+
+.shader-page-container h2 {
+  margin-bottom: 30px;
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-align: center;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
 }
 
 .shader-input {
   width: 100%;
   margin-bottom: 20px;
+}
+
+.shader-input input {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  backdrop-filter: blur(10px);
+}
+
+.shader-input button {
+  background: linear-gradient(45deg, #ff6b35, #f7931e);
+  border: none;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
 }
 
 .shader-description-input {
@@ -52,12 +79,21 @@
 }
 
 .error-message {
-  color: #e74c3c;
-  background-color: #2c1810;
-  padding: 10px;
-  border-radius: 5px;
-  margin-bottom: 20px;
+  background: rgba(255, 0, 0, 0.8);
+  color: white;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 15px 0;
+  font-weight: bold;
   text-align: center;
+  backdrop-filter: blur(10px);
+}
+
+/* Ensure all UI elements are above the shader background */
+.shader-input,
+.shader-page-container > * {
+  position: relative;
+  z-index: 10;
 }
 
 .shader-code-section {
