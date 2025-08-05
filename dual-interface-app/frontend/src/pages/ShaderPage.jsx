@@ -1,14 +1,12 @@
 import { useState, Suspense } from 'react';
-import { Canvas } from '@react-three/fiber';
-import ShaderMesh from '../components/shader/ShaderMesh';
+import { compileAndRender } from '../utils/shaderRunner';
 import './ShaderPage.css';
 
 const ShaderPage = () => {
-  const [shaderDescription, setShaderDescription] = useState('');
+  const [shaderDescription, setShaderDescription] = useState('solid red color'); // Try a simple prompt first
   const [shaderCode, setShaderCode] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-
 
   const generateShader = async () => {
     if (!shaderDescription.trim()) return;
@@ -17,21 +15,41 @@ const ShaderPage = () => {
     setError('');
     
     try {
+      const requestBody = { description: shaderDescription };
+      console.log('Sending request:', requestBody);
+      
       const response = await fetch('/api/generate_shader', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ description: shaderDescription }),
+        body: JSON.stringify(requestBody),
       });
 
+      console.log('Response status:', response.status);
+      console.log('Response headers:', response.headers);
+
       if (!response.ok) {
-        throw new Error('Failed to generate shader');
+        const errorText = await response.text();
+        console.error('Error response:', errorText);
+        throw new Error(`Failed to generate shader: ${response.status} ${response.statusText}`);
       }
 
       const data = await response.json();
-      setShaderCode(data.shader_code || 'No shader code received');
+      console.log('Response data:', data);
+      
+      const cleanedCode = data.shader_code || 'No shader code received';
+      setShaderCode(cleanedCode);
+      
+      // Render the shader using WebGL
+      try {
+        await compileAndRender(cleanedCode, 'shader-canvas');
+      } catch (renderError) {
+        console.error('Shader render error:', renderError);
+        setError(`Shader render error: ${renderError.message}`);
+      }
     } catch (err) {
+      console.error('Request error:', err);
       setError(err.message);
       setShaderCode('');
     } finally {
@@ -79,15 +97,10 @@ const ShaderPage = () => {
       {/* WebGL Canvas */}
       <div className="canvas-container">
         <h3>Shader Preview:</h3>
-        <Canvas>
-          <Suspense fallback={<div>Loading...</div>}>
-            <ShaderMesh shaderCode={shaderCode} />
-          </Suspense>
-          <ambientLight intensity={0.2} />
-          <pointLight position={[10, 10, 10]} />
-        </Canvas>
+        <canvas id="shader-canvas" width="600" height="600" style={{ border: '1px solid #ccc' }}></canvas>
       </div>
     </div>
   );
 };
+
 export default ShaderPage;
